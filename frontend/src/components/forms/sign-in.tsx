@@ -1,3 +1,5 @@
+import { useForm } from 'react-hook-form';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -8,11 +10,24 @@ import {
 } from '@/components/ui/field';
 import { cn } from '@/lib/utils';
 
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form';
+import { Input } from '../ui/input';
+
 export function SignInForm({
   to = encodeURIComponent(location.href),
   className,
   ...props
 }: React.ComponentProps<'div'> & { to?: string }) {
+  const signInForm = useForm({});
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -22,10 +37,61 @@ export function SignInForm({
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-muted-foreground text-balance">
-                  Login to your <span className="font-bold">Thusa One</span>{' '}
+                  Login to your{' '}
+                  <span className="font-bold">
+                    Dialogue Video Analysis Tool
+                  </span>{' '}
                   account to continue.
                 </p>
               </div>
+
+              <Form {...signInForm}>
+                <form
+                  onSubmit={signInForm.handleSubmit((values) =>
+                    console.log(values)
+                  )}
+                  className="flex flex-col w-full h-auto gap-5"
+                >
+                  <div className="flex flex-col w-full h-auto gap-3">
+                    <FormField
+                      control={signInForm.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Email" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            This is your email address.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={signInForm.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Password" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            This is your password.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <Button>Sign In</Button>
+                </form>
+              </Form>
+
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Available Methods
               </FieldSeparator>

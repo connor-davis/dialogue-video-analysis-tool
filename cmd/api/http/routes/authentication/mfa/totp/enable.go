@@ -125,7 +125,7 @@ func (r *TotpRouter) EnableRoute() routing.Route {
 			if currentUser.MfaSecret == nil {
 				secret, err := totp.Generate(totp.GenerateOpts{
 					Issuer:      "One TOTP MFA",
-					AccountName: currentUser.Username,
+					AccountName: currentUser.Email,
 					Period:      30,
 					Digits:      otp.DigitsSix,
 					Algorithm:   otp.AlgorithmSHA1,
@@ -164,7 +164,7 @@ func (r *TotpRouter) EnableRoute() routing.Route {
 
 			secret, err := totp.Generate(totp.GenerateOpts{
 				Issuer:      "One TOTP MFA",
-				AccountName: currentUser.Username,
+				AccountName: currentUser.Email,
 				Period:      30,
 				Digits:      otp.DigitsSix,
 				Algorithm:   otp.AlgorithmSHA1,

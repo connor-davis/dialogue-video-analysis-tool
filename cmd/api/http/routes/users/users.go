@@ -23,6 +23,12 @@ func New(storage storage.Storage, middleware middleware.Middleware) routes.Route
 }
 
 func (r *UsersRouter) LoadRoutes() []routing.Route {
+	userOrganizationAssignmentApi := assignApi.New[models.User, models.Organization](
+		r.storage,
+		"/users",
+		"User",
+		"Organization",
+	)
 	userRoleAssignmentApi := assignApi.New[models.User, models.Role](
 		r.storage,
 		"/users",
@@ -38,6 +44,19 @@ func (r *UsersRouter) LoadRoutes() []routing.Route {
 	routes := []routing.Route{}
 
 	routes = append(routes, []routing.Route{
+		userOrganizationAssignmentApi.AssignRoute(
+			r.middleware.Authenticated(),
+			r.middleware.Authorized("users.organizations.assign"),
+		),
+		userOrganizationAssignmentApi.UnassignRoute(
+			r.middleware.Authenticated(),
+			r.middleware.Authorized("users.organizations.unassign"),
+		),
+		userOrganizationAssignmentApi.ListRoute(
+			r.middleware.Authenticated(),
+			r.middleware.Authorized("users.organizations.list"),
+		),
+
 		userRoleAssignmentApi.AssignRoute(
 			r.middleware.Authenticated(),
 			r.middleware.Authorized("users.roles.assign"),
