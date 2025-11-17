@@ -2,7 +2,6 @@ package storage
 
 import (
 	"github.com/connor-davis/dialogue-video-analysis-tool/common"
-	"github.com/connor-davis/dialogue-video-analysis-tool/internal/models"
 	"github.com/gofiber/fiber/v3/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,6 +10,7 @@ import (
 type Storage interface {
 	Database() *gorm.DB
 	Migrate() error
+	Seed() error
 }
 
 type storage struct {
@@ -31,21 +31,4 @@ func New() Storage {
 	return &storage{
 		database: database,
 	}
-}
-
-func (s *storage) Database() *gorm.DB {
-	return s.database
-}
-
-func (s *storage) Migrate() error {
-	if err := s.database.AutoMigrate(
-		&models.User{},
-		&models.Role{},
-	); err != nil {
-		return err
-	}
-
-	log.Info("✅ Database migration completed successfully.")
-
-	return nil
 }
